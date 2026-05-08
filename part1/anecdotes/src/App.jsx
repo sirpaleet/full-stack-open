@@ -11,6 +11,24 @@ const Buttons = (props) => (
   </div>
 )
 
+const Leaderboard = (props) => {
+  if (props.votes.reduce((a, b) => a + b, 0) == 0) {
+    return <p>No votes yet</p>
+  }
+  return (
+  <ContentBlock anecdotes={props.anecdotes} votes={props.votes} index={props.leader}/>
+  )
+}
+
+const ContentBlock = (props) => {
+  return (
+    <div>
+      <p>{props.anecdotes[props.index]}</p>
+      <p>has {props.votes[props.index]} votes</p>
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -25,18 +43,32 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0])
+  const [leader, setLeader] = useState(0)
 
   const handleVotes = () => {
     const newVotes = [ ...votes ]
     newVotes[selected] += 1
     setVotes(newVotes)
+    countMostVotes(newVotes)
+  }
+
+  const countMostVotes = (newVotes) => {
+    let l = 0
+    for (let i = 0; i < 7; i++) {
+      if (newVotes[i] > newVotes[l]) {
+        l = i
+      }
+    }
+    setLeader(l)
   }
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {votes[selected]} votes</p>
+      <h1>Anecdote of the day</h1>
+      <ContentBlock anecdotes={anecdotes} votes={votes} index={selected}/>
       <Buttons textone="vote" onClickone={handleVotes} texttwo="next anecdote" onClicktwo={() => setSelected(Math.floor(Math.random() * 8))} />
+      <h1>Anecdote with most votes</h1>
+      <Leaderboard anecdotes={anecdotes} votes={votes} leader={leader}/>
     </div>
   )
 }
