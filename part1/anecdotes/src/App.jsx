@@ -1,9 +1,14 @@
 import { useState } from 'react'
 
-const Button = (props) => (
-  <button onClick={props.onClick}>
-    {props.text}
-  </button>
+const Buttons = (props) => (
+  <div>
+    <button onClick={props.onClickone}>
+      {props.textone}
+    </button>
+    <button onClick={props.onClicktwo}>
+      {props.texttwo}
+    </button>
+  </div>
 )
 
 const App = () => {
@@ -19,11 +24,19 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0])
+
+  const handleVotes = () => {
+    const newVotes = [ ...votes ]
+    newVotes[selected] += 1
+    setVotes(newVotes)
+  }
 
   return (
     <div>
       <p>{anecdotes[selected]}</p>
-      <Button text="next anecdote" onClick={() => setSelected(Math.floor(Math.random() * 8))} />
+      <p>has {votes[selected]} votes</p>
+      <Buttons textone="vote" onClickone={handleVotes} texttwo="next anecdote" onClicktwo={() => setSelected(Math.floor(Math.random() * 8))} />
     </div>
   )
 }
