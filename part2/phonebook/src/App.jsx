@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import SearchBar from './components/SearchBar'
+import Form from './components/Form'
+import List from './components/List'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -13,9 +16,9 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('') // so this is kind of treated as mandatory (is a key)
   const [newNumber, setNewNumber] = useState('') // while this is not
-  const [search, setSearch] = useState('') // while this is not
+  const [search, setSearch] = useState('')
 
-  const addPerson = (event) => {
+  const addPerson = (event) => { // not moving this because then two additional values would need to be moved with the Form component
     event.preventDefault()
     for (let i = 0; i < persons.length; i++) {
       if (persons[i].name === newName) {
@@ -31,7 +34,9 @@ const App = () => {
           name: newName,
           number: newNumber
         }
-        setPersons(persons.concat(person))
+        const newPersons = persons.concat(person)
+        setPersons(newPersons)
+        setShownPersons(newPersons.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())))
         setNewName('')
         setNewNumber('')
       }
@@ -54,15 +59,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>filter shown with <input value={search} onChange={handleSearchChange}/></div>
-      <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>name: <input value={newName} onChange={handleNameChange}/></div>
-        <div>number: <input value={newNumber} onChange={handleNumberChange}/></div>
-        <div><button type="submit">add</button></div>
-      </form>
-      <h2>Numbers</h2>
-      {shownPersons.map(p => <p key={p.name}>{p.name} {p.number}</p>)}
+      <SearchBar search={search} handleSearchChange={handleSearchChange}/>
+      <Form addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
+      <List shownPersons={shownPersons}/>
     </div>
   )
 }
