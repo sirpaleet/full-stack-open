@@ -17,3 +17,9 @@ Each task is in their related named directories, and task completions can be see
 - /courseinfo
 - /unicafe
 - /anecdotes
+
+## Part 2:
+Each task is in their related named directories, and task completions can be seen from commit messages and the code content.
+
+/part2:
+- /courseinfo
