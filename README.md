@@ -23,3 +23,4 @@ Each task is in their related named directories, and task completions can be see
 
 /part2:
 - /courseinfo
+- /phonebook
